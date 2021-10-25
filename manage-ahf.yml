@@ -1,4 +1,7 @@
 ---
+#
+# ansible-playbook -i inventory/dbfs/hosts.yml -e hostgorup=dbfs manage-ahf.yml -e ahf_filename=AHF-LINUX_v21.2.3.zip
+#
 - name: Install and Configure Oracle AHF
   hosts: "{{ hostgroup | default('all') }}"
   become: true
