@@ -1,10 +1,15 @@
 pipeline {
 
     parameters {
+      string(
+        name: 'ANSIBLE_ORACLE_INVENTORY',
+        description: 'Subdirectory for Inventory',
+        defaultValue: "inventory/dbfs"
+      )
       choice(
         name: 'ANSIBLE_HOSTGROUP',
         description: 'Ansible Hostgroup?',
-        choices: ['dbfs', 'tag_db19_3fs', 'tag_db18_latestfs']
+        choices: ['all', 'dbfs', 'tag_db19_3fs', 'tag_db18_latestfs']
       )
       string(
         name: 'ANSIBLE_LIMIT',
@@ -20,11 +25,6 @@ pipeline {
         name: 'ANSIBLE_ORACLE_CONFIG_BRANCH',
         description: 'git clone ansible-oracle-inventory branch?',
         defaultValue: "main"
-      )
-      string(
-        name: 'ANSIBLE_ORACLE_INVENTORY',
-        description: 'Subdirectory for Inventory',
-        defaultValue: "inventory/dbfs"
       )
       // agent-label: label "ecs_ansible_${ANSIBLE_VERSION}"
       choice(
