@@ -1,0 +1,150 @@
+pipeline {
+
+    parameters {
+      choice(
+        name: 'ANSIBLE_HOSTGROUP',
+        description: 'Ansible Hostgroup?',
+        choices: ['tag_db19_latestfs', 'tag_db19_3fs', 'tag_db18_latestfs']
+      )
+      string(
+        name: 'ANSIBLE_LIMIT',
+        description: 'Ansible --limit <value>?',
+        defaultValue: 'all'
+      )
+      string(
+        name: 'ANSIBLE_ORACLE_BRANCH',
+        description: 'git clone ansible-oracle branch?',
+        defaultValue: "oc"
+      )
+      string(
+        name: 'ANSIBLE_ORACLE_CONFIG_BRANCH',
+        description: 'git clone ansible-oracle-inventory branch?',
+        defaultValue: "main"
+      )
+      // agent-label: label "ecs_ansible_${ANSIBLE_VERSION}"
+      choice(
+        name: 'ANSIBLE_VERSION',
+        description: 'Major Version of Ansible?',
+        choices: ['2.9']
+      )
+      string(
+        name: 'ANSIBLE_USER',
+        description: 'User for ansible -u <user>',
+        defaultValue: "vagrant"
+      )
+    }
+
+  agent {
+      label "ansible_29"
+  }
+
+  options {
+   timeout(time: 90, unit: 'MINUTES')
+    disableConcurrentBuilds()
+  }
+
+  stages {
+
+    stage('Ansible OS') {
+
+      options {
+          timeout(time: 30, unit: 'MINUTES')
+      }
+
+      environment {
+        ANSIBLE_ROLES_PATH = "${WORKSPACE}/git/ansible-oracle/roles"
+        ANSIBLE_LIBRARY = "${WORKSPACE}/git/ansible-oracle/library"
+        ANSIBLE_ENABLE_PLUGINS = "aws_ec2"
+        ANSIBLE_PIPELINING = "True"
+        ANSIBLE_DISPLAY_SKIPPED_HOSTS = "False"
+      }
+
+      steps {
+        dir("git"){
+          sh 'rm -rf ansible-oracle'
+          sh 'git clone --branch ${ANSIBLE_ORACLE_BRANCH} --single-branch https://github.com/Rendanic/ansible-oracle.git'
+        }
+        dir("git/ansible-oracle-inventory"){
+            git branch: "${ANSIBLE_ORACLE_CONFIG_BRANCH}", url: 'https://github.com/Rendanic/ansible-oracle-inventory'
+          sh 'du -sk ../*'
+
+          ansiblePlaybook(
+            playbook: 'os_update_reboot.yml',
+            credentialsId: "${ansible_sshkey}",
+            inventory: 'inventory/aws',
+            limit: "${ANSIBLE_LIMIT}",
+            disableHostKeyChecking: true,
+            extras: '-v -u ${ANSIBLE_USER}',
+            extraVars: [
+              hostgroup: '${ANSIBLE_HOSTGROUP}'
+          ]
+          )
+          ansiblePlaybook(
+            playbook: 'os.yml',
+            credentialsId: "${ansible_sshkey}",
+            inventory: 'inventory/aws',
+            limit: "${ANSIBLE_LIMIT}",
+            disableHostKeyChecking: true,
+            extras: '-u ${ANSIBLE_USER}',
+            extraVars: [
+              hostgroup: '${ANSIBLE_HOSTGROUP}'
+          ]
+          )
+        }
+      }
+    }
+
+    stage('Ansible DB') {
+
+      options {
+          timeout(time: 90, unit: 'MINUTES')
+      }
+
+      environment {
+        ANSIBLE_ROLES_PATH = "${WORKSPACE}/git/ansible-oracle/roles"
+        ANSIBLE_LIBRARY = "${WORKSPACE}/git/ansible-oracle/library"
+        ANSIBLE_PIPELINING = "True"
+        ANSIBLE_DISPLAY_SKIPPED_HOSTS = "${ANSIBLE_DISPLAY_SKIPPED_HOSTS}"
+      }
+
+      steps {
+        sh 'ls -l ${ANSIBLE_CONFIG}'
+        dir("git/ansible-oracle-config"){
+          ansiblePlaybook(
+            playbook: 'swdb.yml',
+            credentialsId: "${ansible_sshkey}",
+            inventory: 'inventory/aws',
+            limit: "${ANSIBLE_LIMIT}",
+            disableHostKeyChecking: true,
+            extras: '-u ${ANSIBLE_USER}',
+            extraVars: [
+              hostgroup: '${ANSIBLE_HOSTGROUP}'
+          ]
+          )
+          ansiblePlaybook(
+            playbook: 'SQL-Zauberkasten.yml',
+            // credentialsId: "${ansible_sshkey}",
+            inventory: 'inventory/aws',
+            limit: "${ANSIBLE_LIMIT}",
+            disableHostKeyChecking: true,
+            extras: '-u ${ANSIBLE_USER}',
+            extraVars: [
+              hostgroup: '${ANSIBLE_HOSTGROUP}'
+          ]
+          )
+          ansiblePlaybook(
+            playbook: 'manage-db.yml',
+            credentialsId: "${ansible_sshkey}",
+            inventory: 'inventory/aws',
+            limit: "${ANSIBLE_LIMIT}",
+            disableHostKeyChecking: true,
+            extras: '-u ${ANSIBLE_USER}',
+            extraVars: [
+              hostgroup: '${ANSIBLE_HOSTGROUP}'
+          ]
+          )
+        }
+      }
+    }
+  }
+}
