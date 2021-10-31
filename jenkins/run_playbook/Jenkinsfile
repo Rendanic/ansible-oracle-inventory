@@ -21,6 +21,11 @@ pipeline {
         description: 'git clone ansible-oracle-inventory branch?',
         defaultValue: "main"
       )
+      string(
+        name: 'ANSIBLE_ORACLE_INVENTORY',
+        description: 'Subdirectory for Inventory',
+        defaultValue: "inventory/dbfs"
+      )
       // agent-label: label "ecs_ansible_${ANSIBLE_VERSION}"
       choice(
         name: 'ANSIBLE_VERSION',
@@ -54,7 +59,6 @@ pipeline {
       environment {
         ANSIBLE_ROLES_PATH = "${WORKSPACE}/git/ansible-oracle/roles"
         ANSIBLE_LIBRARY = "${WORKSPACE}/git/ansible-oracle/library"
-        ANSIBLE_ENABLE_PLUGINS = "aws_ec2"
         ANSIBLE_PIPELINING = "True"
         ANSIBLE_DISPLAY_SKIPPED_HOSTS = "False"
       }
@@ -70,8 +74,7 @@ pipeline {
 
           ansiblePlaybook(
             playbook: 'os.yml',
-            // credentialsId: "${ansible_sshkey}",
-            inventory: 'inventory/dbfs',
+            inventory: "${ANSIBLE_ORACLE_INVENTORY}",
             limit: "${ANSIBLE_LIMIT}",
             disableHostKeyChecking: true,
             extras: '-u ${ANSIBLE_USER}',
@@ -101,38 +104,25 @@ pipeline {
         dir("git/ansible-oracle-config"){
           ansiblePlaybook(
             playbook: 'swdb.yml',
-            credentialsId: "${ansible_sshkey}",
-            inventory: 'inventory/aws',
+            inventory: "${ANSIBLE_ORACLE_INVENTORY}",
             limit: "${ANSIBLE_LIMIT}",
             disableHostKeyChecking: true,
             extras: '-u ${ANSIBLE_USER}',
             extraVars: [
               hostgroup: '${ANSIBLE_HOSTGROUP}'
-          ]
+            ]
           )
+
           ansiblePlaybook(
-            playbook: 'SQL-Zauberkasten.yml',
-            // credentialsId: "${ansible_sshkey}",
-            inventory: 'inventory/aws',
+            playbook: 'manage-db',
+            inventory: "${ANSIBLE_ORACLE_INVENTORY}",
             limit: "${ANSIBLE_LIMIT}",
             disableHostKeyChecking: true,
             extras: '-u ${ANSIBLE_USER}',
             extraVars: [
               hostgroup: '${ANSIBLE_HOSTGROUP}'
-          ]
+            ]
           )
-          ansiblePlaybook(
-            playbook: 'manage-db.yml',
-            credentialsId: "${ansible_sshkey}",
-            inventory: 'inventory/aws',
-            limit: "${ANSIBLE_LIMIT}",
-            disableHostKeyChecking: true,
-            extras: '-u ${ANSIBLE_USER}',
-            extraVars: [
-              hostgroup: '${ANSIBLE_HOSTGROUP}'
-          ]
-          )
-        }
       }
     }
   }
