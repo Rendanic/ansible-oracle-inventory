@@ -114,7 +114,7 @@ pipeline {
           )
 
           ansiblePlaybook(
-            playbook: 'manage-db',
+            playbook: 'manage-db.yml',
             inventory: "${ANSIBLE_ORACLE_INVENTORY}",
             limit: "${ANSIBLE_LIMIT}",
             disableHostKeyChecking: true,
