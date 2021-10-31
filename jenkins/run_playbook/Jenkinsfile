@@ -69,26 +69,15 @@ pipeline {
           sh 'du -sk ../*'
 
           ansiblePlaybook(
-            playbook: 'os_update_reboot.yml',
-            credentialsId: "${ansible_sshkey}",
-            inventory: 'inventory/aws',
-            limit: "${ANSIBLE_LIMIT}",
-            disableHostKeyChecking: true,
-            extras: '-v -u ${ANSIBLE_USER}',
-            extraVars: [
-              hostgroup: '${ANSIBLE_HOSTGROUP}'
-          ]
-          )
-          ansiblePlaybook(
             playbook: 'os.yml',
-            credentialsId: "${ansible_sshkey}",
-            inventory: 'inventory/aws',
+            // credentialsId: "${ansible_sshkey}",
+            inventory: 'inventory/dbfs',
             limit: "${ANSIBLE_LIMIT}",
             disableHostKeyChecking: true,
             extras: '-u ${ANSIBLE_USER}',
             extraVars: [
               hostgroup: '${ANSIBLE_HOSTGROUP}'
-          ]
+            ]
           )
         }
       }
