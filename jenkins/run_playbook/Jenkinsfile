@@ -101,7 +101,7 @@ pipeline {
 
       steps {
         sh 'ls -l ${ANSIBLE_CONFIG}'
-        dir("git/ansible-oracle-config"){
+        dir("git/ansible-oracle-inventory"){
           ansiblePlaybook(
             playbook: 'swdb.yml',
             inventory: "${ANSIBLE_ORACLE_INVENTORY}",
