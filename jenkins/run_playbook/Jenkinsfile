@@ -4,7 +4,7 @@ pipeline {
       choice(
         name: 'ANSIBLE_HOSTGROUP',
         description: 'Ansible Hostgroup?',
-        choices: ['tag_db19_latestfs', 'tag_db19_3fs', 'tag_db18_latestfs']
+        choices: ['dbfs', 'tag_db19_3fs', 'tag_db18_latestfs']
       )
       string(
         name: 'ANSIBLE_LIMIT',
