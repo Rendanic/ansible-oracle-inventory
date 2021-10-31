@@ -123,6 +123,7 @@ pipeline {
               hostgroup: '${ANSIBLE_HOSTGROUP}'
             ]
           )
+        }
       }
     }
   }
