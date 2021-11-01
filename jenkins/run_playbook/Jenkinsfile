@@ -86,10 +86,10 @@ pipeline {
       }
     }
 
-    stage('Ansible DB') {
+    stage('Ansible DB Software') {
 
       options {
-          timeout(time: 120, unit: 'MINUTES')
+          timeout(time: 45, unit: 'MINUTES')
       }
 
       environment {
@@ -112,6 +112,26 @@ pipeline {
               hostgroup: '${ANSIBLE_HOSTGROUP}'
             ]
           )
+        }
+      }
+    }
+
+    stage('Ansible DB Management') {
+
+      options {
+          timeout(time: 120, unit: 'MINUTES')
+      }
+
+      environment {
+        ANSIBLE_ROLES_PATH = "${WORKSPACE}/git/ansible-oracle/roles"
+        ANSIBLE_LIBRARY = "${WORKSPACE}/git/ansible-oracle/library"
+        ANSIBLE_PIPELINING = "True"
+        ANSIBLE_DISPLAY_SKIPPED_HOSTS = "${ANSIBLE_DISPLAY_SKIPPED_HOSTS}"
+      }
+
+      steps {
+        sh 'ls -l ${ANSIBLE_CONFIG}'
+        dir("git/ansible-oracle-inventory"){
 
           ansiblePlaybook(
             playbook: 'manage-db.yml',
