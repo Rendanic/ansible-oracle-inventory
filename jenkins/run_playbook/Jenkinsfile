@@ -22,7 +22,7 @@ pipeline {
         defaultValue: "oc"
       )
       string(
-        name: 'ANSIBLE_ORACLE_CONFIG_BRANCH',
+        name: 'ANSIBLE_ORACLE_INVENTORY_BRANCH',
         description: 'git clone ansible-oracle-inventory branch?',
         defaultValue: "main"
       )
@@ -69,7 +69,7 @@ pipeline {
           sh 'git clone --branch ${ANSIBLE_ORACLE_BRANCH} --single-branch https://github.com/Rendanic/ansible-oracle.git'
         }
         dir("git/ansible-oracle-inventory"){
-            git branch: "${ANSIBLE_ORACLE_CONFIG_BRANCH}", url: 'https://github.com/Rendanic/ansible-oracle-inventory'
+            git branch: "${ANSIBLE_ORACLE_INVENTORY_BRANCH}", url: 'https://github.com/Rendanic/ansible-oracle-inventory'
           sh 'du -sk ../*'
 
           ansiblePlaybook(
