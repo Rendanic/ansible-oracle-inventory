@@ -40,7 +40,7 @@ pipeline {
     }
 
   agent {
-      label "ansible_29"
+      label "ansible_210"
   }
 
   options {
