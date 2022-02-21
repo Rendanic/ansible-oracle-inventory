@@ -99,27 +99,23 @@ pipeline {
         ANSIBLE_DISPLAY_SKIPPED_HOSTS = "False"
       }
 
-      steps {
-        dir("git"){
-          sh 'rm -rf ansible-oracle'
-          sh 'git clone --branch ${ANSIBLE_ORACLE_BRANCH} --single-branch https://github.com/Rendanic/ansible-oracle.git'
-        }
-        dir("git/ansible-oracle-inventory"){
-            git branch: "${ANSIBLE_ORACLE_CONFIG_BRANCH}", url: 'https://github.com/Rendanic/ansible-oracle-inventory'
-          sh 'du -sk ../*'
+      // steps {
+      //   dir("git/ansible-oracle-inventory"){
+      //       git branch: "${ANSIBLE_ORACLE_CONFIG_BRANCH}", url: 'https://github.com/Rendanic/ansible-oracle-inventory'
+      //     sh 'du -sk ../*'
 
-          ansiblePlaybook(
-            playbook: 'swgi.yml',
-            inventory: "${ANSIBLE_ORACLE_INVENTORY}",
-            limit: "${ANSIBLE_LIMIT}",
-            disableHostKeyChecking: true,
-            extras: '-u ${ANSIBLE_USER}',
-            extraVars: [
-              hostgroup: '${ANSIBLE_HOSTGROUP}'
-            ]
-          )
-        }
-      }
+      //     ansiblePlaybook(
+      //       playbook: 'swgi.yml',
+      //       inventory: "${ANSIBLE_ORACLE_INVENTORY}",
+      //       limit: "${ANSIBLE_LIMIT}",
+      //       disableHostKeyChecking: true,
+      //       extras: '-u ${ANSIBLE_USER}',
+      //       extraVars: [
+      //         hostgroup: '${ANSIBLE_HOSTGROUP}'
+      //       ]
+      //     )
+      //   }
+      // }
     }
 
     stage('Ansible DB') {
