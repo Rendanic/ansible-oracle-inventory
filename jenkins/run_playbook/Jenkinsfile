@@ -86,37 +86,37 @@ pipeline {
       }
     }
 
-    stage('Ansible Restart/GI') {
+    // stage('Ansible Restart/GI') {
 
-      options {
-          timeout(time: 60, unit: 'MINUTES')
-      }
+    //   options {
+    //       timeout(time: 60, unit: 'MINUTES')
+    //   }
 
-      environment {
-        ANSIBLE_ROLES_PATH = "${WORKSPACE}/git/ansible-oracle/roles"
-        ANSIBLE_LIBRARY = "${WORKSPACE}/git/ansible-oracle/library"
-        ANSIBLE_PIPELINING = "True"
-        ANSIBLE_DISPLAY_SKIPPED_HOSTS = "False"
-      }
+    //   environment {
+    //     ANSIBLE_ROLES_PATH = "${WORKSPACE}/git/ansible-oracle/roles"
+    //     ANSIBLE_LIBRARY = "${WORKSPACE}/git/ansible-oracle/library"
+    //     ANSIBLE_PIPELINING = "True"
+    //     ANSIBLE_DISPLAY_SKIPPED_HOSTS = "False"
+    //   }
 
-      // steps {
-      //   dir("git/ansible-oracle-inventory"){
-      //       git branch: "${ANSIBLE_ORACLE_CONFIG_BRANCH}", url: 'https://github.com/Rendanic/ansible-oracle-inventory'
-      //     sh 'du -sk ../*'
+    //   ste'ps {
+    //     dir("git/ansible-oracle-inventory"){
+    //         git branch: "${ANSIBLE_ORACLE_CONFIG_BRANCH}", url: 'https://github.com/Rendanic/ansible-oracle-inventory'
+    //       sh 'du -sk ../*'
 
-      //     ansiblePlaybook(
-      //       playbook: 'swgi.yml',
-      //       inventory: "${ANSIBLE_ORACLE_INVENTORY}",
-      //       limit: "${ANSIBLE_LIMIT}",
-      //       disableHostKeyChecking: true,
-      //       extras: '-u ${ANSIBLE_USER}',
-      //       extraVars: [
-      //         hostgroup: '${ANSIBLE_HOSTGROUP}'
-      //       ]
-      //     )
-      //   }
-      // }
-    }
+    //       ansiblePlaybook(
+    //         playbook: 'swgi.yml',
+    //         inventory: "${ANSIBLE_ORACLE_INVENTORY}",
+    //         limit: "${ANSIBLE_LIMIT}",
+    //         disableHostKeyChecking: true,
+    //         extras: '-u ${ANSIBLE_USER}',
+    //         extraVars: [
+    //           hostgroup: '${ANSIBLE_HOSTGROUP}'
+    //         ]
+    //       )
+    //     }
+    //   }'
+    // }
 
     stage('Ansible DB') {
 
