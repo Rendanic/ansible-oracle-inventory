@@ -30,7 +30,7 @@ pipeline {
       choice(
         name: 'ANSIBLE_VERSION',
         description: 'Major Version of Ansible?',
-        choices: ['2.9']
+        choices: ['29', '210']
       )
       string(
         name: 'ANSIBLE_USER',
@@ -40,11 +40,11 @@ pipeline {
     }
 
   agent {
-      label "ansible_29"
+      label "ansible_${ANSIBLE_VERSION}"
   }
 
   options {
-   timeout(time: 150, unit: 'MINUTES')
+   timeout(time: 180, unit: 'MINUTES')
     disableConcurrentBuilds()
   }
 
@@ -74,6 +74,42 @@ pipeline {
 
           ansiblePlaybook(
             playbook: 'os.yml',
+            inventory: "${ANSIBLE_ORACLE_INVENTORY}",
+            limit: "${ANSIBLE_LIMIT}",
+            disableHostKeyChecking: true,
+            extras: '-u ${ANSIBLE_USER}',
+            extraVars: [
+              hostgroup: '${ANSIBLE_HOSTGROUP}'
+            ]
+          )
+        }
+      }
+    }
+
+    stage('Ansible Restart/GI') {
+
+      options {
+          timeout(time: 60, unit: 'MINUTES')
+      }
+
+      environment {
+        ANSIBLE_ROLES_PATH = "${WORKSPACE}/git/ansible-oracle/roles"
+        ANSIBLE_LIBRARY = "${WORKSPACE}/git/ansible-oracle/library"
+        ANSIBLE_PIPELINING = "True"
+        ANSIBLE_DISPLAY_SKIPPED_HOSTS = "False"
+      }
+
+      steps {
+        dir("git"){
+          sh 'rm -rf ansible-oracle'
+          sh 'git clone --branch ${ANSIBLE_ORACLE_BRANCH} --single-branch https://github.com/Rendanic/ansible-oracle.git'
+        }
+        dir("git/ansible-oracle-inventory"){
+            git branch: "${ANSIBLE_ORACLE_CONFIG_BRANCH}", url: 'https://github.com/Rendanic/ansible-oracle-inventory'
+          sh 'du -sk ../*'
+
+          ansiblePlaybook(
+            playbook: 'swgi.yml',
             inventory: "${ANSIBLE_ORACLE_INVENTORY}",
             limit: "${ANSIBLE_LIMIT}",
             disableHostKeyChecking: true,
