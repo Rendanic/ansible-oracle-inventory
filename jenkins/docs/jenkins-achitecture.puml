@@ -1,0 +1,45 @@
+@startuml
+
+!define osaPuml https://raw.githubusercontent.com/Crashedmind/PlantUML-opensecurityarchitecture2-icons/master
+!include osaPuml/Common.puml
+!include osaPuml/User/all.puml
+!include osaPuml/Hardware/all.puml
+!include osaPuml/Misc/all.puml
+!include osaPuml/Server/all.puml
+!include osaPuml/Site/all.puml
+
+top to bottom direction
+
+rectangle "Jenkins-Master" {
+  interface "http 5100" as jenkinshttp
+  osa_server(jenkins, "Jenkins-Master", "1GB 1Core", "Jenkins LTS")
+  jenkinshttp -> jenkins
+}
+
+rectangle "Agent" {
+  osa_server(jenkinsagent, "Jenkins-Agent", "1GB 1Core", "Jenkins Agent mit Ansible")
+}
+
+
+together {
+  rectangle "DBFS" {
+    interface "ssh" as dbfsssh
+    osa_server(dbfs, "Oracle DB-Server", "4GB 2Core", "Oracle RDBMS on Filesystem")
+    dbfsssh -> dbfs
+  }
+
+  rectangle "DBASM" {
+    interface "ssh" as dbfsasm
+    osa_server(dbasm, "Oracle DB-Server", "4GB 2Core", "Oracle RDBMS on ASM-DG")
+    dbfsasm -> dbasm
+  }
+}
+
+' :User: -left--> jenkinshttp
+jenkinshttp <--left--- :User:
+jenkinsagent ---> jenkinshttp
+' jenkinsagent ---> dbfsssh
+dbfsssh <--- jenkinsagent
+dbfsasm <--- jenkinsagent
+
+@enduml

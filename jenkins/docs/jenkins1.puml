@@ -1,0 +1,30 @@
+@startmindmap
+* Jenkins Server
+ * Job
+  * Job-Type: Multibranch Pipeline
+   * Job-Name: ansible-playbook single-instance-fs.yml
+    * git clone ansible-oracle-inventory
+    * Filter Branches to search for Jenkinsfile
+    * Jenkinsfile
+     * Pipelineconfiguration
+     * Exectuion Step
+      * ansible-playbook
+      * shell script
+   * Job-Name: ansible-playbook single-instance-asm.yml
+ * Jenkins Agent Configuration
+  * Credentials
+  * Labels
+   * Usable for Task executions in Jobs
+  * Job-Execution (triggered from MachineStereotypeFontColor
+   * Execution of Jekinsfile-Pipelines
+    * git clone ...
+    * ansible-playbook a.yml ...
+    * ansible-playbook b.yml ...
+* Jenkins Agent
+ * Connects to Jenkins Server
+  * waits for Job Execution
+ * Jenkins-Agent with Ansible
+  * git clone ansible-oracle-inventory
+  * Exec ansible-playbook
+
+@endmindmap
