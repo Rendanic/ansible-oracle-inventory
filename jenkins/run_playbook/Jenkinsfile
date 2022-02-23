@@ -50,7 +50,7 @@ pipeline {
 
   stages {
 
-    stage('Ansible OS') {
+    stage('OS Ansible') {
 
       options {
           timeout(time: 30, unit: 'MINUTES')
@@ -118,7 +118,7 @@ pipeline {
     //   }'
     // }
 
-    stage('Ansible DB') {
+    stage('DB Ansible') {
 
       options {
           timeout(time: 45, unit: 'MINUTES')
@@ -148,7 +148,7 @@ pipeline {
       }
     }
 
-    stage('Ansible DB Management') {
+    stage('DB Management Ansible') {
 
       options {
           timeout(time: 120, unit: 'MINUTES')
