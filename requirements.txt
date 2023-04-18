@@ -1,0 +1,10 @@
+---
+collections:
+  - name: devsec.hardening
+    version: 8.6.0
+  # - name: opitzconsulting.ansible_oracle
+  #   version: 3.5.1
+  - name: https://github.com/Rendanic/ansible-oracle.git
+    type: git
+    version: master
+    # version: prorahost

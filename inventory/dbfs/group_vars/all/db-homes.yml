@@ -1,6 +1,31 @@
 ---
 apply_patches_db: true
 db_homes_config:
+  db1919-si-ee: &db1919-si-ee
+    version: 19.3.0.0
+    oracle_home: /u01/app/oracle/product/19/db1919-si-ee
+    edition: EE
+    opatch_minversion: 12.2.0.1.32
+    opatch:
+      # Remove Oracle Database 19c Important Recommended One-off Patches (Doc ID 555.1)
+      - patchid: 34419443
+        # Database Release Update 19.17.0.0.221018
+        patchversion: 19.17.0.0.221018
+        stop_processes: true
+        state: present
+        path: 19.17.0.0.221018/dbru/34419443/34419443
+      - patchid: 34444834
+        # OCW Release Update 19.17.0.0.221018
+        stop_processes: true
+        state: present
+        path: 19.17.0.0.221018/gi/34416665/34444834
+      - patchid: 34411846
+        # Oracle JavaVM Component Release Update (OJVM RU) 19.17.0.0.221018
+        stop_processes: true
+        state: present
+        path: 19.17.0.0.221018/ojvm/p34411846_190000_Linux-x86-64.zip
+        # Oracle Database 19c Important Recommended One-off Patches (Doc ID 555.1)
+
   db1917-si-ee: &db1917-si-ee
     version: 19.3.0.0
     oracle_home: /u01/app/oracle/product/19/db1917-si-ee

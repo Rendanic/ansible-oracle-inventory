@@ -1,0 +1,2 @@
+# This file contains ignores rule violations for ansible-lint
+inventory/dbfs/group_vars/dbfs/database_DB1.yml yaml[indentation]

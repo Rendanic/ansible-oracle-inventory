@@ -88,6 +88,7 @@ oracle_database_db1:
     - schema: c##check_mk
       grants:
         - select_catalog_role
+        - dba
         - create session
       state: present
 
@@ -95,6 +96,10 @@ oracle_database_db1:
     - {name: parameter}
     - {name: offline_level0, disabled: false, weekday: "0", hour: "01", minute: "10", day: "*"}
 
+  # roles:
+  #   - name: c##check_mk
+  #     grants: create session
+  #     state: present
 oracle_pdb_db1_orclpdb:
   home: *db_config_home
   listener_port: *cdb_listener_port
@@ -113,5 +118,12 @@ oracle_pdb_db1_orclpdb:
     - {name: undotbs1, size: 10M, autoextend: true, next: 50M, maxsize: 8G, content: permanent, state: present, bigfile: false}
     - {name: users, size: 10M, autoextend: true, next: 50M, maxsize: 2G, content: permanent, state: present, bigfile: false}
     - {name: temp, size: 10M, autoextend: true, next: 50M, maxsize: 4G, content: permanent, state: present, bigfile: false}
-  # init_parameters:
-  #      - {name: db_create_file_dest, value: '/u02/oradata/', scope: both, state: present}
+  init_parameters:
+    - {name: db_create_file_dest, value: '/u02/oradata/', scope: both, state: present}
+
+  users:
+    - schema: testuser
+      grants:
+        - select_catalog_role
+        - create session
+      state: present

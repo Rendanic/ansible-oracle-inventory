@@ -1,0 +1,33 @@
+---
+- name: Tablespace setup
+  hosts: "{{ hostgroup | default('all')}}"
+  vars:
+    dbpasswords:
+      DB1:
+        sys: Oracle_123
+        system: Oracle_123
+    db_homes_config:
+      19c:
+        home: 19c
+        oracle_home: /u01/app/oracle/product/19c/ee_db
+        version: 19.3.0.0
+        edition: EE
+    oracle_databases:
+      - home: 19c
+        oracle_db_name: DB1
+        is_container: false
+        state: present
+        tablespaces:
+          - name: perfstat_tbs
+            size: 10M
+            autoextend: true
+            next: 50M
+            maxsize: 4G
+            content: permanent
+            state: present
+            bigfile: false
+            datafile: "/data/oradata/MOLDB/perfstat01.dbf"
+  tasks:
+    - name: Provision tablespaces
+      ansible.builtin.include_role:
+        name: opitzconsulting.ansible_oracle.oradb_manage_tablespace

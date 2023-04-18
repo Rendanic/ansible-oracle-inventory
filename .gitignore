@@ -3,3 +3,5 @@
 *.log
 *.html
 id_rsa.pub
+ansible-navigator.log
+navigator/replay/*json
