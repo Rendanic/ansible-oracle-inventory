@@ -4,7 +4,7 @@ ansible-navigator:
   #   artifact-dir: navigator
   #   rotate-artifacts-count: 20
   execution-environment:
-    enabled: False
+    enabled: true
     environment-variables:
       set:
         ANSIBLE_CONFIG: ansible.cfg
@@ -12,6 +12,6 @@ ansible-navigator:
     level: warning
   mode: stdout
   playbook-artifact:
-    enable: True
+    enable: true
     replay: "{playbook_dir}/../navigator/replay/{playbook_name}-{time_stamp}.json"
     save-as: "{playbook_dir}/../navigator/replay/{playbook_name}-{time_stamp}.json"
