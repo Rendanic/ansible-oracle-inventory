@@ -2,6 +2,21 @@
 apply_patches_db: true
 db_homes_config:
 
+  db2110-gi-ee: &db2110-gi-ee
+    home: db2110-gi-ee
+    version: 21.3.0.0
+    oracle_home: /u01/app/oracle/product/21/db2110-gi-ee
+    edition: EE
+    opatch_minversion: 12.2.0.1.29
+    opatchauto:
+      - patchid: 35132566
+        patchversion: 21.10.0.0.230418
+        state: present
+        path: 21.10.0.0.230418/gi/35132566/35132566/
+        subpatches:
+          - 35134943  # OCW Release Update 21.10.0.0.230418
+          - 35134934  # Database Release Update 21.10.0.0.230418
+
   db2106-gi-ee: &db2106-gi-ee
     home: db2106-gi-ee
     version: 21.3.0.0
@@ -174,7 +189,7 @@ db_homes_config:
   # use this mapping for fast change between the Release Updates
   # <<: * => merge values from alias and overwrite oracle_home + home
   db21-gi-ee:
-    <<: *db2106-gi-ee
+    <<: *db2110-gi-ee
     oracle_home: /u01/app/oracle/product/21/db1
     home: db21-gi-ee
   db19-gi-ee:

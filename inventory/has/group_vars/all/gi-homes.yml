@@ -3,7 +3,23 @@
 # The variable gi_patches_config is not part of ansible-oracle. It is
 # referenced from other structures in the Inventory.
 
+oraswgi_golen_image_create: true
+
+grid_user: oracle
+
 gi_patches_config:
+
+  21.10.0.0.230418:
+    21.3.0.0:  # Base Release
+      opatch_minversion: 12.2.0.1.29
+      opatchauto:
+        - patchid: 35132566
+          patchversion: 21.4.0.0.211019
+          state: present
+          path: 21.10.0.0.230418/gi/35132566/35132566/
+          subpatches:
+            - 35134943  # OCW Release Update 21.10.0.0.230418
+            - 35134934  # Database Release Update 21.10.0.0.230418
 
   21.6.0.0.220419:
     21.3.0.0:  # Base Release
@@ -132,7 +148,7 @@ gi_patches_config:
 
   # 19.11 is an example based on a GoldenImage with RU 19.11
   # Please add following variable:
-  # oracle_install_image_gi: restart_home_19.11.zip
+  # oracle_install_image_gi: restart_home_19.16.zip
   19.11.0.0.210720:
     19.3.0.0:  # Base Release
       opatch_minversion: 12.2.0.1.25

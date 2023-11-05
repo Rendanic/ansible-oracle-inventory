@@ -1,12 +1,13 @@
 ---
+oracle_install_option_gi: HA_CONFIG
 oracle_install_version_gi: 21.3.0.0
 oracle_home_gi: /u01/app/oracle/21/grid
 
-# oracle_install_image_gi: restart_home_21.4.zip
+oracle_install_image_gi: restart_home_21.10.zip
 
 apply_patches_gi: true
 gi_patches:
-  "{{ gi_patches_config['21.6.0.0.220419'] }}"
+  "{{ gi_patches_config['21.10.0.0.230418'] }}"
 
 # ASMlib Configuration
 # device_persistence: asmlib
@@ -17,6 +18,7 @@ device_persistence: asmfd
 oracle_asmfd_disk_string: /dev/sd*
 oracle_asm_disk_string: AFD:*
 
+oracle_asm_init_dg: data
 asm_diskgroups:        # ASM Diskgroups used for DB-storage. Should map to dict asm_storage_layout.
   - diskgroup: data
     state: present
