@@ -1,0 +1,190 @@
+---
+# This configuration file is used as a global default
+# The variable gi_patches_config is not part of ansible-oracle. It is
+# referenced from other structures in the Inventory.
+
+oraswgi_golen_image_create: true
+
+grid_user: oracle
+
+gi_patches_config:
+
+  21.10.0.0.230418:
+    21.3.0.0:  # Base Release
+      opatch_minversion: 12.2.0.1.29
+      opatchauto:
+        - patchid: 35132566
+          patchversion: 21.4.0.0.211019
+          state: present
+          path: 21.10.0.0.230418/gi/35132566/35132566/
+          subpatches:
+            - 35134943  # OCW Release Update 21.10.0.0.230418
+            - 35134934  # Database Release Update 21.10.0.0.230418
+
+  21.6.0.0.220419:
+    21.3.0.0:  # Base Release
+      opatch_minversion: 12.2.0.1.29
+      opatchauto:
+        - patchid: 33859395
+          patchversion: 21.4.0.0.211019
+          state: present
+          path: 21.6.0.0.220419/gi/33859395/33859395/
+          subpatches:
+            - 33853705  # OCW Release Update 21.6.0.0.220419
+            - 33843745  # Database Release Update 21.6.0.0.220419
+
+  21.4.0.0.211019:
+    21.3.0.0:  # Base Release
+      opatch_minversion: 12.2.0.1.27
+      opatchauto:
+        - patchid: 33250101
+          patchversion: 21.4.0.0.211019
+          state: present
+          path: 21.4.0.0.211019/gi/33250101/33250101/
+          subpatches:
+            - 33271793  # OCW Release Update 21.4.0.0.211019
+            - 33239276  # Database Release Update 21.4.0.0.211019
+
+  19.20.0.0.230718:
+    19.3.0.0:  # Base Release
+      opatch_minversion: 12.2.0.1.30
+      opatchauto:
+        - patchid: 35319490
+          patchversion: 19.20.0.0.230718
+          state: present
+          # path: ./19.20.0.0.230718/gi/35319490/35319490
+          subpatches:
+            - 35320149  # OCW Release Update 19.20.0.0.230718
+            - 33575402  # DBWLM Release Update
+            - 35332537  # ACFS Release Update 19.20.0.0.230718
+            - 35553096  # TOMCAT RELEASE UPDATE 19.0.0.0.0
+            - 35320081  # Database Release Update 19.20.0.0.230718
+
+  19.16.0.0.220719:
+    19.3.0.0:  # Base Release
+      opatch_minversion: 12.2.0.1.30
+      opatchauto:
+        - patchid: 34130714
+          patchversion: 19.16.0.0.220719
+          state: present
+          path: ./19.16.0.0.220719/gi/34130714/34130714
+          subpatches:
+            - 34160635  # OCW Release Update 19.16.0.0.220719
+            - 33575402  # DBWLM Release Update
+            - 34139601  # ACFS Release Update 19.16.0.0.220719
+            - 34318175  # TOMCAT RELEASE UPDATE 19.0.0.0.0
+            - 34133642  # Database Release Update 19.16.0.0.220719
+      # opatch:
+      #     # Remove Oracle Database 19c Important Recommended One-off Patches (Doc ID 555.1)
+      #   - {patchid: 29213893, state: absent, excludeUPI: 1, stop_processes: true}
+      #   - {patchid: 30978304, state: absent, excludeUPI: 1, stop_processes: true}
+      #   - {patchid: 31602782, state: absent, excludeUPI: 1, stop_processes: true}
+      #   - {patchid: 33121934, state: absent, excludeUPI: 1, stop_processes: true}
+      #   - {patchid: 32522300, state: absent, stop_processes: true}
+      #   - {patchid: 31143146, state: absent, stop_processes: true}
+      #   - {patchid: 32919937, state: absent, stop_processes: true}
+      #   - {patchid: 33144001, state: absent, stop_processes: true}
+      #   - patchid: 34086870
+      #     # Oracle JavaVM Component Release Update (OJVM RU) 19.16.0.0.220719
+      #     stop_processes: true
+      #     state: present
+      #     path: 19.16.0.0.220719/ojvm/p34086870_190000_Linux-x86-64.zip
+      #     # patchversion: 19.16.0.0.220719
+      #     # Oracle Database 19c Important Recommended One-off Patches (Doc ID 555.1)
+      #   - patchid: 29213893
+      #     # DBMS_STATS FAILING WITH ERROR ORA-01422
+      #     stop_processes: true
+      #     state: present
+      #     path: 19.16.0.0.220719/p29213893_1916000DBRU_Generic.zip
+      #     # patchversion: 19.16.0.0.220719
+
+  19.15.0.0.220419:
+    19.3.0.0:  # Base Release
+      opatch_minversion: 12.2.0.1.29
+      opatchauto:
+        - patchid: 33803476
+          patchversion: 19.15.0.0.220419
+          state: present
+          path: ./19.15.0.0.220419/gi/33803476/33803476
+          subpatches:
+            - 33815596  # OCW Release Update 19.15.0.0.220419
+            - 33575402  # DBWLM Release Update
+            - 33806152  # Database Release Update 19.15.0.0.220419
+      opatch:
+          # Remove Oracle Database 19c Important Recommended One-off Patches (Doc ID 555.1)
+        - {patchid: 29213893, state: absent, excludeUPI: 1, stop_processes: true}
+        - {patchid: 30978304, state: absent, excludeUPI: 1, stop_processes: true}
+        - {patchid: 31602782, state: absent, excludeUPI: 1, stop_processes: true}
+        - {patchid: 33121934, state: absent, excludeUPI: 1, stop_processes: true}
+        - {patchid: 32522300, state: absent, stop_processes: true}
+        - {patchid: 31143146, state: absent, stop_processes: true}
+        - {patchid: 32919937, state: absent, stop_processes: true}
+        - {patchid: 33144001, state: absent, stop_processes: true}
+        - patchid: 33808367
+          # Oracle JavaVM Component Release Update (OJVM RU) 19.15.0.0.220419
+          stop_processes: true
+          state: present
+          path: 19.15.0.0.220419/ojvm/p33808367_190000_Linux-x86-64.zip
+
+  19.13.0.0.211019:
+    19.3.0.0:  # Base Release
+      opatch_minversion: 12.2.0.1.27
+      opatchauto:
+        - patchid: 33182768
+          patchversion: 19.13.0.0.211019
+          state: present
+          path: ./19.13.0.0.211019/gi/33182768/33182768
+          subpatches:
+            - 33208123  # OCW Release Update 19.13.0.0.211019
+            - 32585572  # DBWLM Release Update
+            - 33192793  # Database Release Update 19.13.0.0.211019
+      opath:
+        # Remove Oracle Database 19c Important Recommended One-off Patches (Doc ID 555.1)
+        - {patchid: 32522300, state: absent, stop_processes: true}
+        - {patchid: 31143146, state: absent, stop_processes: true}
+        - {patchid: 31602782, state: absent, excludeUPI: 24359090, stop_processes: true}
+        - {patchid: 32919937, state: absent, excludeUPI: 24372674, stop_processes: true}
+        - {patchid: 33144001, state: absent, excludeUPI: 24351857, stop_processes: true}
+        - patchid: 32876380
+          # Oracle JavaVM Component Release Update (OJVM RU) 19.12.0.0.210720
+          stop_processes: true
+          state: present
+          path: 19.12.0.0.210720/ojvm/p32876380_190000_Linux-x86-64.zip
+          # Oracle Database 19c Important Recommended One-off Patches (Doc ID 555.1)
+        - {patchid: 31602782, path: 19.12.0.0.210720/p31602782_1912000DBRU_Linux-x86-64.zip, state: present, stop_processes: true}
+        - {patchid: 32919937, path: 19.12.0.0.210720/p32919937_1912000DBRU_Linux-x86-64.zip, state: present, stop_processes: true}
+        - {patchid: 33144001, path: 19.12.0.0.210720/p33144001_1912000DBRU_Linux-x86-64.zip, state: present, stop_processes: true}
+
+  19.12.0.0.210720:
+    19.3.0.0:  # Base Release
+      opatch_minversion: 12.2.0.1.25
+      opatchauto:
+        - patchid: 32895426
+          patchversion: 19.12.0.0.210720
+          state: present
+          path: 19.12.0.0.210720/gi/32895426
+          subpatches:
+            - 32916816  # OCW Release Update 19.12.0.0.210720
+            - 32585572  # DBWLM Release Update
+            - 32904851  # Database Release Update 19.12.0.0.210720
+
+  # 19.11 is an example based on a GoldenImage with RU 19.11
+  # Please add following variable:
+  # oracle_install_image_gi: restart_home_19.16.zip
+  19.11.0.0.210720:
+    19.3.0.0:  # Base Release
+      opatch_minversion: 12.2.0.1.25
+
+  19.4.0.0.190716:
+    19.3.0.0:  # Base Release
+      opatch_minversion: 12.2.0.1.17
+      opatchauto:
+        - patchid: 29252072
+          patchversion: 19.4.0.0.190716
+          state: present
+          path: 29708769/29708769
+          subpatches:
+            - 29834717
+            - 29850993
+            - 29851014
+            - 29401763
